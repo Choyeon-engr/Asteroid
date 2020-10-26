@@ -11,8 +11,3 @@ Component::~Component()
 {
     mOwner->RemoveComponent(this);
 }
-
-void Component::Update(float deltaTime)
-{
-    
-}
