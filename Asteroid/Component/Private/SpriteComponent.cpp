@@ -1,16 +1,17 @@
 #include "SpriteComponent.hpp"
+#include "Game.hpp"
 #include "Actor.hpp"
 #include "CML.hpp"
 
 SpriteComponent::SpriteComponent(Actor* owner, int drawOrder)
 : Component(owner, drawOrder), mTexture(nullptr), mDrawOrder(drawOrder), mTxtWidth(0), mTxtHeight(0)
 {
-    mOwner->AddComponent(this);
+    mOwner->GetGame()->AddSprite(this);
 }
 
 SpriteComponent::~SpriteComponent()
 {
-    mOwner->RemoveComponent(this);
+    mOwner->GetGame()->RemoveSprite(this);
 }
 
 void SpriteComponent::Draw(SDL_Renderer* renderer)
