@@ -31,9 +31,15 @@ void Actor::UpdateComponents(float deltaTime)
         component->Update(deltaTime);
 }
 
-void Actor::UpdateActor(float deltaTime)
+void Actor::Input(const uint8_t* keyState)
 {
-    
+    if (mState == EEnable)
+    {
+        for (auto component : mComponents)
+            component->Input(keyState);
+        
+        ActorInput(keyState);
+    }
 }
 
 void Actor::AddComponent(Component* component)
