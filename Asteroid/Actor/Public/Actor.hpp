@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <cstdint>
+
 #include "CML.hpp"
 
 using namespace std;
@@ -19,13 +21,16 @@ public:
     
     void Update(float deltaTime);
     void UpdateComponents(float deltaTime);
-    virtual void UpdateActor(float deltaTime);
+    virtual void UpdateActor(float deltaTime) {}
+    
+    void Input(const uint8_t* keyState);
+    virtual void ActorInput(const uint8_t* keyState) {}
     
     const State GetState() const noexcept   { return mState; }
     void SetState(State state)              { mState = state; }
     
     const CML::Vector2D& GetPosition() const noexcept   { return mPosition; }
-    void SetPosition(CML::Vector2D& position)           { mPosition = position; }
+    void SetPosition(const CML::Vector2D& position)     { mPosition = position; }
     
     const float GetRotation() const noexcept    { return mRotation; }
     void SetRotation(float rotation)            { mRotation = rotation; }
