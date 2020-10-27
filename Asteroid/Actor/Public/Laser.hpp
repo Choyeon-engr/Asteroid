@@ -10,6 +10,7 @@ public:
     void UpdateActor(float deltaTime) override;
     
 private:
+    class MovementComponent* mMovement;
     class CircleComponent* mCircle;
     
     float mDeathTimer;

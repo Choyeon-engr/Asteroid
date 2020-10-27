@@ -6,10 +6,11 @@
 #include "Asteroid.hpp"
 
 Laser::Laser(Game* game)
-    : Actor(game), mDeathTimer(1.f)
+: Actor(game), mDeathTimer(1.f)
 {
-    MovementComponent* movement = new MovementComponent(this, 2);
-    movement->SetForwardSpeed(500.f);
+    mMovement = new MovementComponent(this, 2);
+    mMovement->AddForce(CML::Vector2D(GetForwardVector().X * 20000.f, GetForwardVector().Y * 20000.f));
+    mMovement->SetMass(1.f);
     
     SpriteComponent* sprite = new SpriteComponent(this, 3);
     sprite->SetTexture(game->GetTexture("/Assets/Laser.png"));
@@ -20,6 +21,8 @@ Laser::Laser(Game* game)
 
 void Laser::UpdateActor(float deltaTime)
 {
+    mMovement->AddForce(CML::Vector2D(GetForwardVector().X * 20000.f, GetForwardVector().Y * 20000.f));
+    
     mDeathTimer -= deltaTime;
     if (mDeathTimer <= 0.f)
         SetState(EDisable);
