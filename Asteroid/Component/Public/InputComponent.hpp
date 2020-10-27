@@ -3,16 +3,17 @@
 #include <cstdint>
 
 #include "MovementComponent.hpp"
+#include "CML.hpp"
 
 class InputComponent : public MovementComponent
 {
 public:
-    InputComponent(class Actor* owner, int updateOrder) : MovementComponent(owner, updateOrder), mForwardKey(0), mBackwardKey(0), mClockwiseKey(0), mCounterClockwiseKey(0) {}
+    InputComponent(class Actor* owner, int updateOrder) : MovementComponent(owner, updateOrder), mMaxForceScalar(0.f), mMaxAngularSpeed(0.f), mForwardKey(0), mBackwardKey(0), mClockwiseKey(0), mCounterClockwiseKey(0) {}
     
     void Input(const uint8_t* keyState) override;
     
-    float GetMaxForwardSpeed() const noexcept       { return mMaxForwardSpeed; }
-    void SetMaxForwardSpeed(float maxForwardSpeed)  { mMaxForwardSpeed = maxForwardSpeed; }
+    float GetMaxForceScalar() const noexcept    { return mMaxForceScalar; }
+    void SetMaxForceScalar(float forceScalar)   { mMaxForceScalar = forceScalar; }
     
     float GetMaxAngularSpeed() const noexcept       { return mMaxAngularSpeed; }
     void SetMaxAngularSpeed(float maxAngularSpeed)  { mMaxAngularSpeed = maxAngularSpeed; }
@@ -30,7 +31,7 @@ public:
     void SetCounterClockwiseKey(int counterClockwiseKey)    { mCounterClockwiseKey = counterClockwiseKey; }
     
 private:
-    float mMaxForwardSpeed;
+    float mMaxForceScalar;
     float mMaxAngularSpeed;
     
     int mForwardKey;

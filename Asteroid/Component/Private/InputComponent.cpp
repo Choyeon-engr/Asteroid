@@ -1,16 +1,17 @@
 #include "InputComponent.hpp"
+#include "Actor.hpp"
 
 void InputComponent::Input(const uint8_t* keyState)
 {
-    float forwardSpeed = 0.f;
+    CML::Vector2D force(0.f, 0.f);
     
     if (keyState[mForwardKey])
-        forwardSpeed += mMaxForwardSpeed;
+        force += mOwner->GetForwardVector() * mMaxForceScalar;
     
     if (keyState[mBackwardKey])
-        forwardSpeed -= mMaxForwardSpeed;
+        force -= mOwner->GetForwardVector() * mMaxForceScalar;
     
-    SetForwardSpeed(forwardSpeed);
+    AddForce(force);
     
     float angularSpeed = 0.f;
     
