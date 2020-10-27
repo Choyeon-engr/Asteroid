@@ -18,6 +18,7 @@ public:
     
     enum Kinds
     {
+        ENone,
         EAsteroid,
         EJet
     };
