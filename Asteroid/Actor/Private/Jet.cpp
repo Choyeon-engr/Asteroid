@@ -12,6 +12,8 @@
 Jet::Jet(Game* game)
 : Actor(game), mInvincibleTime(3.f), mLaserCooldown(0.f)
 {
+    SetKinds(EJet);
+    
     SetPosition(CML::Vector2D(256.f, 256.f));
     SetRotation(CML::Pi / 2.f);
     
@@ -20,14 +22,15 @@ Jet::Jet(Game* game)
     input->SetBackwardKey(SDL_SCANCODE_S);
     input->SetClockwiseKey(SDL_SCANCODE_A);
     input->SetCounterClockwiseKey(SDL_SCANCODE_D);
-    input->SetMaxForwardSpeed(300.f);
+    input->SetMaxForceScalar(10000.f);
     input->SetMaxAngularSpeed(CML::Pi * 2);
+    input->SetMass(1.f);
     
     SpriteComponent* sprite = new SpriteComponent(this, 3);
     sprite->SetTexture(game->GetTexture("/Assets/Jet.png"));
     
     mCircle = new CircleComponent(this, 4);
-    mCircle->SetRadius(40.f);
+    mCircle->SetRadius(30.f);
 }
 
 void Jet::UpdateActor(float deltaTime)
