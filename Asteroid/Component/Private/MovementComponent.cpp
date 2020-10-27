@@ -14,7 +14,21 @@ void MovementComponent::Update(float deltaTime)
         CML::Vector2D position = mOwner->GetPosition();
         position += mVelocity * deltaTime;
         
-        if (mOwner->GetKinds() == Actor::EAsteroid)
+        /* Specialization for Asteroid */
+        if (mOwner->GetKinds() == Actor::EJet)
+        {
+            if (position.X < 0.f)
+                position.X = 0.f;
+            else if (position.X > 512.f)
+                position.X = 512.f;
+            
+            if (position.Y < 0.f)
+                position.Y = 0.f;
+            else if (position.Y > 512.f)
+                position.Y = 512.f;
+        }
+        
+        else if (mOwner->GetKinds() == Actor::EAsteroid)
         {
             if (position.X < 0.f)
                 position.X = 512.f;
