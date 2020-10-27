@@ -3,7 +3,7 @@
 #include "Component.hpp"
 
 Actor::Actor(Game* game)
-    : mState(EEnable), mPosition(CML::Vector2D(0.f, 0.f)), mRotation(0.f), mScale(1.f), mGame(game)
+: mState(EEnable), mPosition(CML::Vector2D(0.f, 0.f)), mRotation(0.f), mScale(1.f), mGame(game)
 {
     mGame->AddActor(this);
 }
@@ -48,8 +48,8 @@ void Actor::AddComponent(Component* component)
     auto iter = mComponents.begin();
     
     for (; iter != mComponents.end(); ++iter)
-        if (updateOrder < (*iter)->GetUpdateOrder())
-            break;
+    if (updateOrder < (*iter)->GetUpdateOrder())
+        break;
     
     mComponents.insert(iter, component);
 }
