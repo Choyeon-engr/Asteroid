@@ -16,6 +16,12 @@ public:
         EDisable
     };
     
+    enum Kinds
+    {
+        EAsteroid,
+        EJet
+    };
+    
     Actor(class Game* game);
     virtual ~Actor();
     
@@ -26,8 +32,11 @@ public:
     void Input(const uint8_t* keyState);
     virtual void ActorInput(const uint8_t* keyState) {}
     
-    const State GetState() const noexcept   { return mState; }
-    void SetState(State state)              { mState = state; }
+    const State& GetState() const noexcept  { return mState; }
+    void SetState(const State& state)       { mState = state; }
+    
+    const Kinds& GetKinds() const noexcept  { return mKinds; }
+    void SetKinds(const Kinds& kinds)       { mKinds = kinds; }
     
     const CML::Vector2D& GetPosition() const noexcept   { return mPosition; }
     void SetPosition(const CML::Vector2D& position)     { mPosition = position; }
@@ -47,6 +56,7 @@ public:
     
 private:
     State mState;
+    Kinds mKinds;
     
     CML::Vector2D mPosition;
     float mRotation;
