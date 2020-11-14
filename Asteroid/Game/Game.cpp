@@ -1,10 +1,13 @@
 #include <SDL2_image/SDL_image.h>
+#include <GL/glew.h>
 
 #include "Game.hpp"
 #include "Actor.hpp"
 #include "SpriteComponent.hpp"
 #include "Jet.hpp"
 #include "Asteroid.hpp"
+#include "Shader.hpp"
+#include "VertexArray.hpp"
 #include "CML.hpp"
 
 bool Game::Init()
@@ -15,13 +18,35 @@ bool Game::Init()
     if (!IMG_Init(IMG_INIT_PNG))
         return false;
     
-    mWindow = SDL_CreateWindow("Asteroid", 0, 0, 512, 512, 0);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+    
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+    
+    mWindow = SDL_CreateWindow("Asteroid", 0, 0, 512, 512, SDL_WINDOW_OPENGL);
     if (!mWindow)
         return false;
     
-    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!mRenderer)
+    mContext = SDL_GL_CreateContext(mWindow);
+    
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK)
         return false;
+    
+    glGetError();
+    
+    if (!LoadShaders())
+        return false;
+    
+    InitSpriteVertices();
     
     CML::Random::Init();
     
@@ -46,7 +71,7 @@ void Game::Quit()
 {
     UnloadData();
     IMG_Quit();
-    SDL_DestroyRenderer(mRenderer);
+    SDL_GL_DeleteContext(mContext);
     SDL_DestroyWindow(mWindow);
     SDL_Quit();
 }
@@ -98,23 +123,23 @@ void Game::RemoveSprite(SpriteComponent* sprite)
 SDL_Texture* Game::GetTexture(const string& fileName)
 {
     SDL_Texture* texture = nullptr;
-    const string AbsolutePath = string("/Users/choyeon/Game/Asteroid/Asteroid") + fileName;
-    auto iter = mTextures.find(AbsolutePath.c_str());
+    const string absolutePath = string("/Users/choyeon/Game/Asteroid/Asteroid") + fileName;
+    auto iter = mTextures.find(absolutePath.c_str());
     
     if (iter != mTextures.end())
         texture = iter->second;
     else
     {
-        SDL_Surface* surface = IMG_Load(AbsolutePath.c_str());
+        SDL_Surface* surface = IMG_Load(absolutePath.c_str());
         if (!surface)
             return nullptr;
         
-        texture = SDL_CreateTextureFromSurface(mRenderer, surface);
+        // texture = SDL_CreateTextureFromSurface(mRenderer, surface);
         SDL_free(surface);
         if (!texture)
             return nullptr;
         
-        mTextures.emplace(AbsolutePath, texture);
+        mTextures.emplace(absolutePath, texture);
     }
     
     return texture;
@@ -195,13 +220,16 @@ void Game::Update()
 
 void Game::Output()
 {
-    SDL_SetRenderDrawColor(mRenderer, 0, 50, 100, 255);
-    SDL_RenderClear(mRenderer);
+    glClearColor(0.86f, 0.86f, 0.86f, 1.f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    mSpriteShader->SetActive();
+    mSpriteVertices->SetActive();
     
     for (auto sprite : mSprites)
-        sprite->Draw(mRenderer);
+        sprite->Draw(mSpriteShader);
     
-    SDL_RenderPresent(mRenderer);
+    SDL_GL_SwapWindow(mWindow);
 }
 
 void Game::LoadData()
@@ -222,4 +250,32 @@ void Game::UnloadData()
         SDL_DestroyTexture(texture.second);
     
     mTextures.clear();
+}
+
+bool Game::LoadShaders()
+{
+    mSpriteShader = new Shader();
+    if (!mSpriteShader->Load("/Shaders/Basic.vert", "/Shaders/Basic.frag"))
+        return false;
+    
+    mSpriteShader->SetActive();
+    
+    return true;
+}
+
+void Game::InitSpriteVertices()
+{
+    float vertices[] = {
+        -0.5f,  0.5f, 0.f, 0.f, 0.f,
+        0.5f,  0.5f, 0.f, 1.f, 0.f,
+        0.5f, -0.5f, 0.f, 1.f, 1.f,
+        -0.5f, -0.5f, 0.f, 0.f, 1.f
+    };
+    
+    unsigned int indices[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+    
+    mSpriteVertices = new VertexArray(vertices, 4, indices, 6);
 }
