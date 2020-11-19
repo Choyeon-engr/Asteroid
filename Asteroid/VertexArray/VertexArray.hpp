@@ -15,7 +15,7 @@ private:
     unsigned int mNumVertices;
     unsigned int mNumIndices;
     
-    unsigned int mVertexBufferID;
-    unsigned int mIndexBufferID;
-    unsigned int mVertexArrayID;
+    unsigned int mVertexBuffer;
+    unsigned int mIndexBuffer;
+    unsigned int mVertexArray;
 };
