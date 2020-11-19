@@ -6,13 +6,13 @@
 
 bool Shader::Load(const string& vertexName, const string& fragmentName)
 {
-    if (!CompileShader(vertexName, GL_VERTEX_SHADER, mVertexShaderID) || !CompileShader(fragmentName, GL_FRAGMENT_SHADER, mFragmentShaderID))
+    if (!CompileShader(vertexName, GL_VERTEX_SHADER, mVertexShader) || !CompileShader(fragmentName, GL_FRAGMENT_SHADER, mFragmentShader))
         return false;
     
-    mShaderProgramID = glCreateProgram();
-    glAttachShader(mShaderProgramID, mVertexShaderID);
-    glAttachShader(mShaderProgramID, mVertexShaderID);
-    glLinkProgram(mShaderProgramID);
+    mShaderProgram = glCreateProgram();
+    glAttachShader(mShaderProgram, mVertexShader);
+    glAttachShader(mShaderProgram, mFragmentShader);
+    glLinkProgram(mShaderProgram);
     
     if (!IsValidProgram())
         return false;
@@ -22,14 +22,21 @@ bool Shader::Load(const string& vertexName, const string& fragmentName)
 
 void Shader::Unload()
 {
-    glDeleteProgram(mShaderProgramID);
-    glDeleteShader(mVertexShaderID);
-    glDeleteShader(mFragmentShaderID);
+    glDeleteProgram(mShaderProgram);
+    glDeleteShader(mVertexShader);
+    glDeleteShader(mFragmentShader);
 }
 
 void Shader::SetActive()
 {
-    glUseProgram(mShaderProgramID);
+    glUseProgram(mShaderProgram);
+}
+
+void Shader::SetMatrixUniform(const char* name, const CML::Matrix4D& matrix)
+{
+    GLuint location = glGetUniformLocation(mShaderProgram, name);
+    
+    glUniformMatrix4fv(location, 1, GL_TRUE, matrix.GetAsFloatPtr());
 }
 
 bool Shader::CompileShader(const string& fileName, GLenum shaderType, GLuint& outShader)
@@ -61,6 +68,7 @@ bool Shader::IsCompiled(GLuint shader)
     GLint status;
     
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+    
     if (status != GL_TRUE)
     {
         char buffer[512];
@@ -79,13 +87,14 @@ bool Shader::IsValidProgram()
 {
     GLint status;
     
-    glGetProgramiv(mShaderProgramID, GL_LINK_STATUS, &status);
+    glGetProgramiv(mShaderProgram, GL_LINK_STATUS, &status);
+    
     if (status != GL_TRUE)
     {
         char buffer[512];
         memset(buffer, 0, 512);
         
-        glGetShaderInfoLog(mShaderProgramID, 511, nullptr, buffer);
+        glGetShaderInfoLog(mShaderProgram, 511, nullptr, buffer);
         SDL_Log("GLSL Link Status:\n%s", buffer);
         
         return false;

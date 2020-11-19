@@ -4,10 +4,10 @@
 #include "Game.hpp"
 #include "Actor.hpp"
 #include "SpriteComponent.hpp"
-#include "Jet.hpp"
-#include "Asteroid.hpp"
 #include "Shader.hpp"
 #include "VertexArray.hpp"
+#include "Jet.hpp"
+#include "Asteroid.hpp"
 #include "CML.hpp"
 
 bool Game::Init()
@@ -29,9 +29,10 @@ bool Game::Init()
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
     
-    mWindow = SDL_CreateWindow("Asteroid", 0, 0, 512, 512, SDL_WINDOW_OPENGL);
+    mWindow = SDL_CreateWindow("Asteroid", 0, 0, 1024, 768, SDL_WINDOW_OPENGL);
     if (!mWindow)
         return false;
     
@@ -46,7 +47,7 @@ bool Game::Init()
     if (!LoadShaders())
         return false;
     
-    InitSpriteVertices();
+    InitSpriteVerts();
     
     CML::Random::Init();
     
@@ -123,23 +124,22 @@ void Game::RemoveSprite(SpriteComponent* sprite)
 SDL_Texture* Game::GetTexture(const string& fileName)
 {
     SDL_Texture* texture = nullptr;
-    const string absolutePath = string("/Users/choyeon/Game/Asteroid/Asteroid") + fileName;
-    auto iter = mTextures.find(absolutePath.c_str());
+    const string AbsolutePath = string("/Users/choyeon/Game/Asteroid/Asteroid") + fileName;
+    auto iter = mTextures.find(AbsolutePath.c_str());
     
     if (iter != mTextures.end())
         texture = iter->second;
     else
     {
-        SDL_Surface* surface = IMG_Load(absolutePath.c_str());
+        SDL_Surface* surface = IMG_Load(AbsolutePath.c_str());
         if (!surface)
             return nullptr;
         
-        // texture = SDL_CreateTextureFromSurface(mRenderer, surface);
         SDL_free(surface);
         if (!texture)
             return nullptr;
         
-        mTextures.emplace(absolutePath, texture);
+        mTextures.emplace(AbsolutePath, texture);
     }
     
     return texture;
@@ -224,7 +224,7 @@ void Game::Output()
     glClear(GL_COLOR_BUFFER_BIT);
     
     mSpriteShader->SetActive();
-    mSpriteVertices->SetActive();
+    mSpriteVerts->SetActive();
     
     for (auto sprite : mSprites)
         sprite->Draw(mSpriteShader);
@@ -263,19 +263,21 @@ bool Game::LoadShaders()
     return true;
 }
 
-void Game::InitSpriteVertices()
+void Game::InitSpriteVerts()
 {
-    float vertices[] = {
-        -0.5f,  0.5f, 0.f, 0.f, 0.f,
-        0.5f,  0.5f, 0.f, 1.f, 0.f,
-        0.5f, -0.5f, 0.f, 1.f, 1.f,
-        -0.5f, -0.5f, 0.f, 0.f, 1.f
+    float vertices[] =
+    {
+        -0.5f,  0.5f, 0.f,
+        0.5f,  0.5f, 0.f,
+        0.5f, -0.5f, 0.f,
+        -0.5f, -0.5f, 0.f,
     };
     
-    unsigned int indices[] = {
+    unsigned int indices[] =
+    {
         0, 1, 2,
         2, 3, 0
     };
     
-    mSpriteVertices = new VertexArray(vertices, 4, indices, 6);
+    mSpriteVerts = new VertexArray(vertices, 4, indices, 6);
 }

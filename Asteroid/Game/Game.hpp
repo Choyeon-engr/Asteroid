@@ -10,7 +10,7 @@ using namespace std;
 class Game
 {
 public:
-    Game() : mIsRunning(true), mIsUpdatingActors(false), mTicksCount(0), mWindow(nullptr), mIsDead(false), mRespawnTime(3.f) {}
+    Game() : mIsRunning(true), mIsUpdatingActors(false), mTicksCount(0), mIsDead(false), mRespawnTime(3.f) {}
     
     bool Init();
     void Loop();
@@ -40,7 +40,7 @@ private:
     void UnloadData();
     
     bool LoadShaders();
-    void InitSpriteVertices();
+    void InitSpriteVerts();
     
     bool mIsRunning;
     bool mIsUpdatingActors;
@@ -57,7 +57,7 @@ private:
     unordered_map<string, SDL_Texture*> mTextures;
     
     class Shader* mSpriteShader;
-    class VertexArray* mSpriteVertices;
+    class VertexArray* mSpriteVerts;
     
     /* Specialization for Asteroid */
     class Jet* mJet;
