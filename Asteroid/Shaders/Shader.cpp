@@ -32,7 +32,7 @@ void Shader::SetActive()
     glUseProgram(mShaderProgram);
 }
 
-void Shader::SetMatrixUniform(const char* name, const CML::Matrix4D& matrix)
+void Shader::SetMatrixUniform(const char* name, const Matrix4D& matrix)
 {
     GLuint location = glGetUniformLocation(mShaderProgram, name);
     

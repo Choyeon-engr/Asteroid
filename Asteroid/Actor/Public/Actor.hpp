@@ -39,8 +39,8 @@ public:
     const Kinds& GetKinds() const noexcept  { return mKinds; }
     void SetKinds(const Kinds& kinds)       { mKinds = kinds; }
     
-    const CML::Vector2D& GetPosition() const noexcept   { return mPosition; }
-    void SetPosition(const CML::Vector2D& position)     { mPosition = position; }
+    const Vector2D& GetPosition() const noexcept   { return mPosition; }
+    void SetPosition(const Vector2D& position)     { mPosition = position; }
     
     const float GetRotation() const noexcept    { return mRotation; }
     void SetRotation(float rotation)            { mRotation = rotation; }
@@ -48,7 +48,7 @@ public:
     const float GetScale() const noexcept   { return mScale; }
     void SetScale(float scale)              { mScale = scale; }
     
-    CML::Vector2D GetForwardVector() const noexcept { return CML::Vector2D(CML::Cos(mRotation), -CML::Sin(mRotation)); }
+    Vector2D GetForwardVector() const noexcept { return Vector2D(Math::Cos(mRotation), -Math::Sin(mRotation)); }
     
     void AddComponent(class Component* component);
     void RemoveComponent(class Component* component);
@@ -59,7 +59,7 @@ private:
     State mState;
     Kinds mKinds;
     
-    CML::Vector2D mPosition;
+    Vector2D mPosition;
     float mRotation;
     float mScale;
     

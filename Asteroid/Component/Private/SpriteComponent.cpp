@@ -2,7 +2,6 @@
 #include "Game.hpp"
 #include "Actor.hpp"
 #include "Shader.hpp"
-#include "CML.hpp"
 
 SpriteComponent::SpriteComponent(Actor* owner, int drawOrder)
 : Component(owner, drawOrder), mTexture(nullptr), mDrawOrder(drawOrder), mTxtWidth(0), mTxtHeight(0)

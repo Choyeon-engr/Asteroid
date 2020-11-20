@@ -12,7 +12,7 @@ public:
     float GetRadius() const         { return mOwner->GetScale() * mRadius; }
     void SetRadius(float radius)    { mRadius = radius; }
     
-    const CML::Vector2D& GetCenter() const { return mOwner->GetPosition(); }
+    const Vector2D& GetCenter() const { return mOwner->GetPosition(); }
     
 private:
     float mRadius;

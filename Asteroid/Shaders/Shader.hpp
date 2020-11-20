@@ -18,7 +18,7 @@ public:
     
     void SetActive();
     
-    void SetMatrixUniform(const char* name, const CML::Matrix4D& matrix);
+    void SetMatrixUniform(const char* name, const Matrix4D& matrix);
     
 private:
     bool CompileShader(const string& fileName, GLenum shaderType, GLuint& outShader);

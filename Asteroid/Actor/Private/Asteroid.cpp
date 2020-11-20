@@ -5,20 +5,19 @@
 #include "MovementComponent.hpp"
 #include "SpriteComponent.hpp"
 #include "CircleComponent.hpp"
-#include "CML.hpp"
 
 Asteroid::Asteroid(Game* game)
-: Actor(game), mCircle(nullptr)
+: Actor(game)
 {
     SetKinds(EAsteroid);
     
-    CML::Vector2D randomPosition = CML::Random::GetRandomVector2D(CML::Vector2D(0.f, 0.f), CML::Vector2D(512.f, 512.f));
+    Vector2D randomPosition = Random::GetRandomVector2D(Vector2D(0.f, 0.f), Vector2D(512.f, 512.f));
     SetPosition(randomPosition);
     
-    SetRotation(CML::Random::GetRandomFloat(0.f, CML::Pi * 2.f));
+    SetRotation(Random::GetRandomFloat(0.f, Math::Pi * 2.f));
     
     mMovement = new MovementComponent(this, 2);
-    mMovement->AddForce(CML::Vector2D(GetForwardVector().X * 1000.f, GetForwardVector().Y * 1000.f));
+    mMovement->AddForce(Vector2D(GetForwardVector().x * 1000.f, GetForwardVector().y * 1000.f));
     mMovement->SetMass(1.f);
     
     SpriteComponent* sprite = new SpriteComponent(this, 3);
@@ -37,5 +36,5 @@ Asteroid::~Asteroid()
 
 void Asteroid::UpdateActor(float deltaTime)
 {
-    mMovement->AddForce(CML::Vector2D(GetForwardVector().X * 800.f, GetForwardVector().Y * 800.f));
+    mMovement->AddForce(Vector2D(GetForwardVector().x * 800.f, GetForwardVector().y * 800.f));
 }

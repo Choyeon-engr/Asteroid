@@ -7,15 +7,14 @@
 #include "CircleComponent.hpp"
 #include "Asteroid.hpp"
 #include "Laser.hpp"
-#include "CML.hpp"
 
 Jet::Jet(Game* game)
 : Actor(game), mInvincibleTime(3.f), mLaserCooldown(0.f)
 {
     SetKinds(EJet);
     
-    SetPosition(CML::Vector2D(256.f, 256.f));
-    SetRotation(CML::Pi / 2.f);
+    SetPosition(Vector2D(256.f, 256.f));
+    SetRotation(Math::Pi / 2.f);
     
     InputComponent* input = new InputComponent(this, 1);
     input->SetForwardKey(SDL_SCANCODE_W);
@@ -23,7 +22,7 @@ Jet::Jet(Game* game)
     input->SetClockwiseKey(SDL_SCANCODE_A);
     input->SetCounterClockwiseKey(SDL_SCANCODE_D);
     input->SetMaxForceScalar(10000.f);
-    input->SetMaxAngularSpeed(CML::Pi * 2);
+    input->SetMaxAngularSpeed(Math::Pi * 2);
     input->SetMass(1.f);
     
     SpriteComponent* sprite = new SpriteComponent(this, 3);

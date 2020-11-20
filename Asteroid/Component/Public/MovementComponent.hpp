@@ -10,7 +10,7 @@ public:
     
     void Update(float deltaTime) override;
     
-    void AddForce(const CML::Vector2D& force) { mForce += force; }
+    void AddForce(const Vector2D& force) { mForce += force; }
     
     const float GetMass() const noexcept    { return mMass; }
     void SetMass(float mass)                { mMass = mass; }
@@ -19,9 +19,9 @@ public:
     void SetAngularSpeed(float angularSpeed)        { mAngularSpeed = angularSpeed; }
     
 private:
-    CML::Vector2D mForce;
-    CML::Vector2D mAcceleration;
-    CML::Vector2D mVelocity;
+    Vector2D mForce;
+    Vector2D mAcceleration;
+    Vector2D mVelocity;
     float mMass;
     float mAngularSpeed;
 };

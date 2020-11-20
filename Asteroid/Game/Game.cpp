@@ -49,7 +49,7 @@ bool Game::Init()
     
     InitSpriteVerts();
     
-    CML::Random::Init();
+    Random::Init();
     
     LoadData();
     

@@ -9,7 +9,7 @@ Laser::Laser(Game* game)
 : Actor(game), mDeathTimer(1.f)
 {
     mMovement = new MovementComponent(this, 2);
-    mMovement->AddForce(CML::Vector2D(GetForwardVector().X * 20000.f, GetForwardVector().Y * 20000.f));
+    mMovement->AddForce(Vector2D(GetForwardVector().x * 20000.f, GetForwardVector().y * 20000.f));
     mMovement->SetMass(1.f);
     
     SpriteComponent* sprite = new SpriteComponent(this, 3);
@@ -21,7 +21,7 @@ Laser::Laser(Game* game)
 
 void Laser::UpdateActor(float deltaTime)
 {
-    mMovement->AddForce(CML::Vector2D(GetForwardVector().X * 20000.f, GetForwardVector().Y * 20000.f));
+    mMovement->AddForce(Vector2D(GetForwardVector().x * 20000.f, GetForwardVector().y * 20000.f));
     
     mDeathTimer -= deltaTime;
     if (mDeathTimer <= 0.f)
